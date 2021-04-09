@@ -11,5 +11,5 @@ This is a smart personal finance management program created for the purpose of p
 
 ## Technologies
 * Pandas 
-* PyQt
+* tKinter
 
