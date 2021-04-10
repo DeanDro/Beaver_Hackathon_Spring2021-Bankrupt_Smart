@@ -1,6 +1,7 @@
 """Revenues class is tracking all incomes generated from the user and feeds total income in the
 recommendations output"""
 
+import datetime
 from tkinter import messagebox
 
 
@@ -12,15 +13,16 @@ class Revenues:
         self.total_revenues = 0
 
     # Add income in the revenues dictionary
-    def add_revenue(self, income_value, income_description, frequency, timeline, category_revenue):
-        income_input = dict()
+    def add_revenue(self, month_year, income_description, income_value, frequency, timeline, category_revenue):
         try:
+            income_input = dict()
+            monthly_input = dict()
             income_input['Description'] = income_description
-            income_input['Income'] = float(income_value)
+            income_input['Income'] = income_value
             income_input['Frequency'] = frequency
-            income_input['Timeline'] = int(timeline)
+            income_input['Timeline'] = timeline
             income_input['Category'] = category_revenue
-            self.revenues_dict[income_description] = income_input
+            monthly_input[income_description] = income_input
         except ValueError:
             print('You entered wrong value')
             messagebox.showerror('Wrong value', 'You entered an incompatible value')
