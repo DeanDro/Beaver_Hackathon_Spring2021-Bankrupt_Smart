@@ -30,17 +30,12 @@ class DataAnalysis:
     # Get the sum of all assets by category
     def get_total_assets_by_type(self, month=None):
         types_assets = self.assets['Description'].unique()
-
         # Get each unique time period in a datetime format and target for the designated month
-        all_periods = self.assets['Time'].unique()
-        self.assets['Month'] = pandas.to_datetime(self.assets['Time'])
-        last_month = self.assets['Month'][-1:]
-        print(last_month)
         assets_by_category = dict()
         for asset_type in types_assets:
-            assets_by_category[asset_type] = self.assets['Value'][self.assets['Description'] ==
-                                                                  asset_type].sum()
-        print(assets_by_category)
+            assets_by_category[asset_type] = self.assets['Value'][(self.assets['Description'] ==
+                                                                  asset_type)][-1:]
+        return assets_by_category
 
     # Helper method to convert data from series to non mutable objects
     def convert_value_from_series(self, value, value_type=None):
