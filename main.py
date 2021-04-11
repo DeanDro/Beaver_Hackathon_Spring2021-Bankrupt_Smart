@@ -4,6 +4,8 @@
 #              in the Beaver Hack Spring 2021 Hackathon
 
 import tkinter as tk
+import tkinter.ttk
+
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from Assets_Revenues_Benefits.a_r_b_analysis import DataAnalysis
@@ -16,10 +18,16 @@ class BankruptSmart(tk.Frame):
     def __init__(self, master):
         super().__init__(master)
         self.master = master
-        self.frame = tk.Frame(self.master)
-        self.frame2 = tk.Frame(self.master)
-        self.frame.grid(column=1, row=1)
-        self.frame2.grid(column=1, row=2)
+        self.main_frame = tk.Frame(self.master)
+        self.main_frame.grid(column=0, row=0)
+        self.my_canvas = tk.Canvas(self.main_frame)
+        self.my_canvas.grid(column=0, row=0)
+        self.scroll = tkinter.ttk.Scrollbar(self.main_frame, orient=tk.VERTICAL, command=self.my_canvas.yview)
+        self.scroll.grid(column=0, row=0)
+        self.my_canvas.configure(yscrollcommand=self.scroll.set)
+        self.my_canvas.bind('<Configure>', lambda e: self.my_canvas.configure(scrollregion=self.my_canvas.bbox('all')))
+        self.frame = tk.Frame(self.my_canvas)
+        self.my_canvas.create_window((0, 0), window=self.frame, anchor='nw')
         self.graphics_design()
         self.revenue_data = DataAnalysis()
         self.expenses_data = ExpensesAnalysis()
@@ -43,7 +51,7 @@ class BankruptSmart(tk.Frame):
         figure = plt.Figure(figsize=(4, 4), dpi=100)
         ax1 = figure.add_subplot(111)
         bar1 = FigureCanvasTkAgg(figure, self.frame)
-        bar1.get_tk_widget().grid(column=0, row=0)
+        bar1.get_tk_widget().grid(column=0, row=0, pady=5, padx=5)
         df1 = data[['Timeline', 'Income_Value']].groupby('Timeline').sum()
         df1.plot(kind='bar', legend=True, ax=ax1)
         ax1.set_title('Monthly Income')
@@ -54,7 +62,7 @@ class BankruptSmart(tk.Frame):
         figure = plt.Figure(figsize=(4, 4), dpi=100)
         ax1 = figure.add_subplot(111)
         bar1 = FigureCanvasTkAgg(figure, self.frame)
-        bar1.get_tk_widget().grid(column=1, row=0)
+        bar1.get_tk_widget().grid(column=1, row=0, pady=5, padx=5)
         df1 = data[['Timeline', 'Value']].groupby('Timeline').sum()
         df1.plot(kind='line', legend=True, ax=ax1)
         ax1.set_title('Value of Assets')
@@ -65,7 +73,7 @@ class BankruptSmart(tk.Frame):
         figure = plt.Figure(figsize=(4, 4), dpi=100)
         ax1 = figure.add_subplot(111)
         bar = FigureCanvasTkAgg(figure, self.frame)
-        bar.get_tk_widget().grid(column=2, row=0)
+        bar.get_tk_widget().grid(column=2, row=0, pady=5, padx=5)
         df1 = data[['Time', 'Value']].groupby('Time').sum()
         df1.plot(kind='bar', legend=True, ax=ax1)
         ax1.set_title('Value of Benefits')
@@ -75,8 +83,8 @@ class BankruptSmart(tk.Frame):
         data = self.expenses_data.get_type_expense('bills')
         figure = plt.Figure(figsize=(4, 4), dpi=100)
         ax1 = figure.subplots()
-        bar = FigureCanvasTkAgg(figure, self.frame2)
-        bar.get_tk_widget().grid(column=0, row=0)
+        bar = FigureCanvasTkAgg(figure, self.frame)
+        bar.get_tk_widget().grid(column=0, row=1, pady=5, padx=5)
         df1 = data[['Month_Year', 'Monthly Cost']].groupby('Month_Year').sum()
         df1.plot(kind='bar', legend=True, ax=ax1)
         ax1.set_title('Value of Bills')
@@ -86,8 +94,8 @@ class BankruptSmart(tk.Frame):
         data = self.expenses_data.get_type_expense('debt')
         figure = plt.Figure(figsize=(4, 4), dpi=100)
         ax1 = figure.subplots()
-        bar = FigureCanvasTkAgg(figure, self.frame2)
-        bar.get_tk_widget().grid(column=1, row=0)
+        bar = FigureCanvasTkAgg(figure, self.frame)
+        bar.get_tk_widget().grid(column=1, row=1, pady=5, padx=5)
         df1 = data[['Month_Year', 'Total Cost']].groupby('Month_Year').sum()
         df1.plot(kind='line', legend=True, ax=ax1)
         ax1.set_title('Value of Debt')
