@@ -1,7 +1,6 @@
 """Revenues class is tracking all incomes generated from the user and feeds total income in the
 recommendations output"""
 
-import datetime
 from tkinter import messagebox
 
 
